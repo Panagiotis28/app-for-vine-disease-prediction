@@ -1,0 +1,57 @@
+
+<div class="w-full max-w-md mx-auto">
+  <!-- Upload Area -->
+  <div *ngIf="!preview"
+    [ngClass]="{'border-green-500 bg-green-50': dragActive, 
+              'border-gray-300 hover:border-green-400 hover:bg-green-50/30': !dragActive}"
+    class="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors"
+    (click)="triggerFileInput()"
+    (dragover)="handleDragOver($event)"
+    (dragleave)="handleDragLeave($event)"
+    (drop)="handleDrop($event)">
+    
+    <!-- Upload Icon -->
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" 
+      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+      class="mx-auto h-12 w-12 text-gray-400">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+      <polyline points="17 8 12 3 7 8"></polyline>
+      <line x1="12" y1="3" x2="12" y2="15"></line>
+    </svg>
+    
+    <p class="mt-2 text-sm text-gray-600">
+      Drag and drop an image of a vine leaf here, or click to select a file
+    </p>
+    <p class="text-xs text-gray-500 mt-1">
+      Supports: JPEG, PNG, WebP
+    </p>
+    
+    <input
+      #fileInput
+      type="file"
+      class="hidden"
+      (change)="handleFileChange($event)"
+      accept="image/*"
+      [disabled]="isLoading">
+  </div>
+
+  <!-- Preview Area -->
+  <div *ngIf="preview" class="relative bg-black rounded-lg overflow-hidden">
+    <button 
+      (click)="clearImage()"
+      [disabled]="isLoading"
+      class="absolute top-2 right-2 bg-black/70 text-white p-1 rounded-full hover:bg-black/90 transition-colors z-10">
+      <!-- X Icon -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" 
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 6 6 18"></path>
+        <path d="m6 6 12 12"></path>
+      </svg>
+    </button>
+    
+    <img 
+      [src]="preview" 
+      alt="Leaf preview" 
+      class="w-full h-64 object-contain">
+  </div>
+</div>
