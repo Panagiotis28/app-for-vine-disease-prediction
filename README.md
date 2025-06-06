@@ -84,7 +84,7 @@
     ```
     pip install -r src/api/flask/requirements.txt
     ```
- 4. Place your pre-trained model file (`experiment_43_fold_5_best_model.h5`) in the `src/api` directory
+ 4. Place your pre-trained model file (`experiment_16_fold_5_best_model.h5`) in the `src/api` directory
  5. Start the Flask server:
     ```
     python flask_api.py

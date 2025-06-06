@@ -19,7 +19,7 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max upload
-model_path = 'experiment_43_fold_5_best_model.h5'
+model_path = 'eperiment_16_fold_5_best_model.h5'
 
 # Function to check if file extension is allowed
 def allowed_file(filename):
