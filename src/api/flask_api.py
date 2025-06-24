@@ -17,11 +17,12 @@ CORS(app)
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-
+ds_mean = [36.297977, 36.297977,36.297977]
+ds_std = [70.14874, 68.97558, 68.51941]
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 
 #Changing the model to which ever we want. REQUIRED to have the .h5 file inside the src/api folder 
-model_path = 'exp1_fold5_best.h5'
+model_path = 'custom_rotate.h5'
 
 # Function to check if file extension is allowed
 def allowed_file(filename):
@@ -73,23 +74,27 @@ def predict():
             # You have to comment out this section when you are using the ResNet50 model
             # because of the the different process of the images while training of it
             #############
-            #img = cv2.imread(filepath)
-            #img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-            #img = cv2.resize(img, (128, 128))
-            #img = img / 255.0  # Normalize to [0,1]
-            #img = np.expand_dims(img, axis=0)  # Add batch dimension
-            #prediction = model.predict(img)
+            img = cv2.imread(filepath)
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            img = cv2.resize(img, (128, 128))
+            img = tf.cast(img, tf.float32)
+            img = img / 255.0  # Normalize to [0,1]
+            img = (img - ds_mean) / ds_std  
+            img = np.expand_dims(img, axis=0)  # Add batch dimension
+            prediction = model.predict(img)
 
             ##################
             # You have to comment this section when you are NOT using the ResNet50 model
             # because of the the different process of the images while training of it
             #############
-            img_raw    = tf.io.read_file(filepath)  
-            img_tensor = tf.image.decode_jpeg(img_raw, channels=3)
-            img_tensor = tf.image.resize(img_tensor, (224, 224))
-            img_tensor = preprocess_input(img_tensor)  
-            img_tensor = tf.expand_dims(img_tensor, axis=0) 
-            prediction = model.predict(img_tensor)
+            #img_raw    = tf.io.read_file(filepath)  
+            #img_tensor = tf.image.decode_jpeg(img_raw, channels=3)
+            #img_tensor = tf.image.resize(img_tensor, (128, 128))
+            #img_tensor = tf.cast(img_tensor, tf.float32)
+            #img_tensor = preprocess_input(img_tensor)  
+            #img_tensor = (img_tensor - ds_mean) / ds_std  
+            #img_tensor = tf.expand_dims(img_tensor, axis=0) 
+            #prediction = model.predict(img_tensor)
             
             class_idx = np.argmax(prediction, axis=1)[0]
             confidence = float(prediction[0][class_idx])
