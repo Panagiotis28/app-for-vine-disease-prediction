@@ -26,10 +26,6 @@ __pycache__/
 *.py[cod]
 *.log
 
-# Model weights & data
-**/data/
-**/*.h5
-
 # OS files
 .DS_Store
 Thumbs.db
